@@ -10,7 +10,8 @@ let speed = 6;
 demo.state0 = function() {};
 demo.state0.prototype = {
     preload: function() {
-        game.load.image('daisho', 'game-assets/sprites/daisho.png');
+        // game.load.image('daisho', 'game-assets/sprites/daisho.png');
+        game.load.spritesheet('daisho', 'game-assets/spritesheets/daisho-sprite.png', 240, 340);
         game.load.image('trees', 'game-assets/backgrounds/trees.png');
     },
     create: function() {
@@ -25,6 +26,7 @@ demo.state0.prototype = {
         daisho.scale.setTo(.7, .7);
         game.physics.enable(daisho);
         daisho.body.collideWorldBounds = true;
+        daisho.animations.add('walk', [0, 1, 2, 3]);
 
         game.camera.follow(daisho);
         game.camera.deadzone = new Phaser.Rectangle(centerX - 300, 0, 600, 1000);
@@ -33,12 +35,19 @@ demo.state0.prototype = {
         if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
             daisho.scale.setTo(.7, .7);
             daisho.x += speed;
+            daisho.animations.play('walk', 14, true);
         }
         else if (game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
             daisho.scale.setTo(-.7, .7);
             daisho.x -= speed;
+            daisho.animations.play('walk', 14, true);
         }
-        if (game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+        else {
+            daisho.animations.stop('walk');
+            daisho.frame = 0;
+        }
+
+        if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
             if (daisho.y < 318) {
                 daisho.y = 318;
             }
